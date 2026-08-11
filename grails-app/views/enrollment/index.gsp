@@ -22,7 +22,7 @@
 
                     <g:link
                         controller="enrollment"
-                        action="delete"
+                        action="unenroll"
                         params="[id: enrollment.id]"
                         onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                         Delete

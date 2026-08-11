@@ -5,33 +5,47 @@ import static org.springframework.http.HttpStatus.*
 
 class StudentController {
 
+    EnrollmentService enrollmentService
     StudentService studentService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [
+            save: "POST",
+            update: "PUT",
+            delete: "DELETE"
+    ]
 
     def index(Integer max) {
-    params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 10, 100)
 
-    def students
-    def studentCount
+        def students
+        def studentCount
 
-    if (params.name) {
-        students = Student.findAllByNameIlike(
-            "%${params.name}%",
-            [max: params.max, offset: params.offset ?: 0]
-        )
+        if (params.name) {
+            students = Student.findAllByNameIlike(
+                    "%${params.name}%",
+                    [max: params.max, offset: params.offset ?: 0]
+            )
 
-        studentCount = Student.countByNameIlike("%${params.name}%")
-    } else {
-        students = studentService.list(params)
-        studentCount = studentService.count()
+            studentCount =
+                    Student.countByNameIlike("%${params.name}%")
+        } else {
+            students = studentService.list(params)
+            studentCount = studentService.count()
+        }
+
+        respond students, model: [studentCount: studentCount]
     }
 
-    respond students, model: [studentCount: studentCount]
-}
-
     def show(Long id) {
-        respond studentService.get(id)
+
+        Student student = studentService.get(id)
+
+        double gpa = enrollmentService.calculateGpa(id)
+
+        [
+                student: student,
+                gpa: gpa
+        ]
     }
 
     def create() {
@@ -47,16 +61,30 @@ class StudentController {
         try {
             studentService.save(student)
         } catch (ValidationException e) {
-            respond student.errors, view:'create'
+            log.error("Error saving student", e)
+
+            respond student.errors, view: 'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'student.label', default: 'Student'), student.id])
+                flash.message = message(
+                        code: 'default.created.message',
+                        args: [
+                                message(
+                                        code: 'student.label',
+                                        default: 'Student'
+                                ),
+                                student.id
+                        ]
+                )
                 redirect student
             }
-            '*' { respond student, [status: CREATED] }
+
+            '*' {
+                respond student, [status: CREATED]
+            }
         }
     }
 
@@ -73,16 +101,30 @@ class StudentController {
         try {
             studentService.save(student)
         } catch (ValidationException e) {
-            respond student.errors, view:'edit'
+            log.error("Error updating student", e)
+
+            respond student.errors, view: 'edit'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'student.label', default: 'Student'), student.id])
+                flash.message = message(
+                        code: 'default.updated.message',
+                        args: [
+                                message(
+                                        code: 'student.label',
+                                        default: 'Student'
+                                ),
+                                student.id
+                        ]
+                )
                 redirect student
             }
-            '*'{ respond student, [status: OK] }
+
+            '*' {
+                respond student, [status: OK]
+            }
         }
     }
 
@@ -96,20 +138,50 @@ class StudentController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'student.label', default: 'Student'), id])
-                redirect action:"index", method:"GET"
+                flash.message = message(
+                        code: 'default.deleted.message',
+                        args: [
+                                message(
+                                        code: 'student.label',
+                                        default: 'Student'
+                                ),
+                                id
+                        ]
+                )
+
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+
+            '*' {
+                render status: NO_CONTENT
+            }
         }
+    }
+
+    def testGpa() {
+        render enrollmentService.calculateGpa(1L)
     }
 
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'student.label', default: 'Student'), params.id])
+                flash.message = message(
+                        code: 'default.not.found.message',
+                        args: [
+                                message(
+                                        code: 'student.label',
+                                        default: 'Student'
+                                ),
+                                params.id
+                        ]
+                )
+
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+
+            '*' {
+                render status: NOT_FOUND
+            }
         }
     }
 }

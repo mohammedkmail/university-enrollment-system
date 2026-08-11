@@ -14,5 +14,4 @@ interface StudentService {
     void delete(Serializable id)
 
     Student save(Student student)
-
 }

@@ -32,7 +32,9 @@
                 </g:if>
                 <f:display bean="student" listClass="container" listItemClass="row mb-3" labelClass="form-label col-sm-3 text-sm-end" valueClass="col-sm-9" />
                 
-
+                <p>
+                      <strong>GPA:</strong> ${gpa}
+                </p>
                 <h3>Enrolled Courses</h3>
 
                     <g:if test="${student.enrollments}">

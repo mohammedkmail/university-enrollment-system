@@ -2,51 +2,57 @@ package university
 
 class EnrollmentController {
 
-    def index() { 
-        [enrollmentList: Enrollment.list()]
+    EnrollmentService enrollmentService
 
-        
+    def index() {
+        [enrollmentList: enrollmentService.listEnrollments()]
     }
 
-    def create(){
-        [students: Student.list(), courses: Course.list()]
-
+    def create() {
+        enrollmentService.getCreateData()
     }
 
     def save() {
-    Student student = Student.get(params.long('studentId'))
-    Course course = Course.get(params.long('courseId'))
 
-    def existingEnrollment = Enrollment.findByStudentAndCourse(student, course)
+        def enrollment = enrollmentService.saveEnrollment(
+                params.long('studentId'),
+                params.long('courseId'),
+                params.grade
+        )
 
-    if (existingEnrollment) {
+        if (!enrollment) {
+            redirect action: 'create'
+            return
+        }
+
+        redirect action: 'index'
+    }
+
+    def enroll() {
+
+    def enrollment = enrollmentService.enroll(
+            params.long('studentId'),
+            params.long('courseId'),
+            params.grade
+    )
+
+    if (!enrollment) {
         redirect action: 'create'
         return
     }
 
-    def enrollment = new Enrollment(
-        student: student,
-        course: course,
-        grade: params.grade
-    )
-
-    enrollment.save()
-
     redirect action: 'index'
 }
-
-
-
 
     def delete(Long id) {
-    Enrollment.withTransaction {
-        def enrollment = Enrollment.get(id)
+        enrollmentService.deleteEnrollment(id)
 
-        if (enrollment) {
-            enrollment.delete()
-        }
+        redirect action: 'index'
     }
 
-    redirect action: 'index'
-}
+    def unenroll(Long id) {
+        enrollmentService.unenroll(id)
+
+        redirect action: 'index'
+    }
 }
