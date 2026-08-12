@@ -48,7 +48,9 @@
                     <g:textField
                         name="name"
                         value="${params.name}"
-                        placeholder="Search by name"/>
+                        placeholder="Search by name"
+                        class="form-control"
+                        />
 
                     <g:submitButton
                         name="search"

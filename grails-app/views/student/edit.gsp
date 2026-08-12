@@ -9,45 +9,120 @@
 <div id="content" role="main">
     <div class="container">
         <section class="row">
-            <a href="#edit-student" class="visually-hidden-focusable" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+            <a href="#edit-student" class="visually-hidden-focusable" tabindex="-1">
+                <g:message code="default.link.skip.label" default="Skip to content&hellip;"/>
+            </a>
+
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <ul class="navbar-nav container-fluid">
-                    <li class="nav-item"><a class="nav-link btn" aria-label="Home" href="${createLink(uri: '/')}">
-                        <i class="bi-house"></i> <g:message code="default.home.label"/></a>
+                    <li class="nav-item">
+                        <a class="nav-link btn" aria-label="Home" href="${createLink(uri: '/')}">
+                            <i class="bi-house"></i>
+                            <g:message code="default.home.label"/>
+                        </a>
                     </li>
-                    <li class="nav-item"><g:link class="nav-link btn" aria-label="List" action="index">
-                        <i class="bi-database"></i> <g:message code="default.list.label" args="[entityName]" /></g:link>
+
+                    <li class="nav-item">
+                        <g:link class="nav-link btn" aria-label="List" action="index">
+                            <i class="bi-database"></i>
+                            <g:message code="default.list.label" args="[entityName]" />
+                        </g:link>
                     </li>
+
                     <li class="nav-item me-lg-auto">
-                        <g:link class="nav-link btn" aria-label="List" action="create"><i class="bi-database-add"></i> <g:message code="default.new.label" args="[entityName]" /></g:link>
+                        <g:link class="nav-link btn" aria-label="List" action="create">
+                            <i class="bi-database-add"></i>
+                            <g:message code="default.new.label" args="[entityName]" />
+                        </g:link>
                     </li>
                 </ul>
             </nav>
         </section>
+
         <section class="row">
             <div id="edit-student" class="col-12 content scaffold-edit" role="main">
-                <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
+
+                <h1>
+                    <g:message code="default.edit.label" args="[entityName]" />
+                </h1>
+
                 <g:if test="${flash.message}">
                     <div class="message" role="status">${flash.message}</div>
                 </g:if>
+
                 <g:hasErrors bean="${this.student}">
                     <ul class="alert alert-danger list-unstyled" role="alert">
                         <g:eachError bean="${this.student}" var="error">
-                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><i class="bi-exclamation-circle"></i> <g:message error="${error}"/></li>
+                            <li>
+                                <i class="bi-exclamation-circle"></i>
+                                <g:message error="${error}"/>
+                            </li>
                         </g:eachError>
                     </ul>
                 </g:hasErrors>
+
                 <g:form resource="${this.student}" controller="${controllerName}" method="PUT">
+
                     <g:hiddenField name="version" value="${this.student?.version}" />
+
                     <fieldset class="form">
-                        <f:all bean="student" class="row" requiredClass="mb-3 required" labelClass="col-sm-2 col-form-label text-sm-end" divClass="col-sm-10" widget-class="form-control" widget-invalidClass="is-invalid" widget-selectDateClass="w-auto form-select d-inline" widget-checkBoxClass="form-check-input align-middle" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+
+                            <g:textField
+                                    name="name"
+                                    value="${student?.name}"
+                                    class="form-control"/>
+
+                            <g:hasErrors bean="${student}" field="name">
+                                <div class="text-danger">
+                                    <g:fieldError bean="${student}" field="name"/>
+                                </div>
+                            </g:hasErrors>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+
+                            <g:textField
+                                    name="email"
+                                    value="${student?.email}"
+                                    class="form-control"/>
+
+                            <g:hasErrors bean="${student}" field="email">
+                                <div class="text-danger">
+                                    <g:fieldError bean="${student}" field="email"/>
+                                </div>
+                            </g:hasErrors>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Student Number</label>
+
+                            <g:textField
+                                    name="studentNumber"
+                                    value="${student?.studentNumber}"
+                                    class="form-control"/>
+
+                            <g:hasErrors bean="${student}" field="studentNumber">
+                                <div class="text-danger">
+                                    <g:fieldError bean="${student}" field="studentNumber"/>
+                                </div>
+                            </g:hasErrors>
+                        </div>
+
                     </fieldset>
+
                     <fieldset class="bg-body-tertiary">
                         <button class="btn btn-outline-primary" type="submit">
-                            <i class="bi-floppy"></i> ${message(code: 'default.button.update.label', default: 'Update')}
+                            <i class="bi-floppy"></i>
+                            ${message(code: 'default.button.update.label', default: 'Update')}
                         </button>
                     </fieldset>
+
                 </g:form>
+
             </div>
         </section>
     </div>

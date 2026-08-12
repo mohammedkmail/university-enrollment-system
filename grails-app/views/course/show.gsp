@@ -41,7 +41,7 @@
                 Email: ${enrollment.student.email}<br>
                 Student Number: ${enrollment.student.studentNumber}<br>
                 Grade: ${enrollment.grade}<br>
-                Enrolled At: ${enrollment.enrolledAt}
+                Enrolled At: <g:formatDate date="${enrollment.enrolledAt}" format="dd-MM-yyyy"/>
             </li>
         </g:each>
     </ul>

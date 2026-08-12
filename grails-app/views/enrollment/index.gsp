@@ -10,6 +10,16 @@
 <div class="container mt-4">
 
     <h1>Enrollments</h1>
+    <g:link controller="enrollment"
+        action="create"
+        class="btn btn-primary mb-3">
+    Add Enrollment
+    </g:link>
+    <g:if test="${flash.message}">
+        <div class="alert alert-primary" role="alert">
+            ${flash.message}
+        </div>
+    </g:if>
 
     <g:if test="${enrollmentList}">
         <ul>
@@ -18,7 +28,7 @@
                     Student: ${enrollment.student.name}<br>
                     Course: ${enrollment.course.title}<br>
                     Grade: ${enrollment.grade}<br>
-                    Enrolled At: ${enrollment.enrolledAt}<br>
+                    Enrolled At: <g:formatDate date="${enrollment.enrolledAt}" format="dd-MM-yyyy"/><br>
 
                     <g:link
                         controller="enrollment"
