@@ -1,10 +1,15 @@
 package university
 
+import grails.rest.Resource
+
+@Resource(uri = '/api/students')
 class Student {
 
     String name
     String email
     String studentNumber
+
+    static responseFormats = ['json', 'html']
 
     static constraints = {
         name blank: false
@@ -12,5 +17,5 @@ class Student {
         studentNumber nullable: false
     }
 
-    static hasMany=[enrollments:Enrollment]
+    static hasMany = [enrollments: Enrollment]
 }
