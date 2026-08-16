@@ -110,4 +110,40 @@ class StudentRestController extends RestfulController<Student> {
             gpa      : gpa
         ])
     }
+
+    @Override
+def save() {
+    def json = request.JSON
+
+    Student student = new Student(
+        name: json.name,
+        email: json.email,
+        studentNumber: json.studentNumber
+    )
+
+    if (!student.validate()) {
+        response.status = 400
+        respond([
+            errors: student.errors.allErrors.collect { error ->
+                [
+                    field  : error.field,
+                    message: message(error: error)
+                ]
+            }
+        ])
+        return
+    }
+
+    student.save()
+
+    response.status = 201
+    respond([
+        data: [
+            id           : student.id,
+            name         : student.name,
+            email        : student.email,
+            studentNumber: student.studentNumber
+        ]
+    ])
+}
 }
