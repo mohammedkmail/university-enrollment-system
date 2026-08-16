@@ -4,7 +4,10 @@ class UrlMappings {
 
     static mappings = {
 
+        // =========================
         // Students API
+        // =========================
+
         get "/api/students"(
             controller: "studentRest",
             action: "index"
@@ -40,7 +43,41 @@ class UrlMappings {
             action: "courses"
         )
 
-        // Default Grails routes
+
+        // =========================
+        // Courses API
+        // =========================
+
+        get "/api/courses"(
+            controller: "courseRest",
+            action: "index"
+        )
+
+        get "/api/courses/$id"(
+            controller: "courseRest",
+            action: "show"
+        )
+
+
+        // =========================
+        // Enrollments API
+        // =========================
+
+        get "/api/enrollments"(
+            controller: "enrollmentRest",
+            action: "index"
+        )
+
+        get "/api/enrollments/$id"(
+            controller: "enrollmentRest",
+            action: "show"
+        )
+
+
+        // =========================
+        // Default Grails Routes
+        // =========================
+
         "/$controller/$action?/$id?(.$format)?" {
             constraints {
                 // apply constraints here
@@ -48,6 +85,7 @@ class UrlMappings {
         }
 
         "/"(view: "/index")
+
         "500"(view: "/error")
         "404"(view: "/notFound")
     }

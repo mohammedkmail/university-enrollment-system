@@ -19,6 +19,7 @@ class StudentRestController extends RestfulController<Student> {
         def offset = params.int('offset') ?: 0
 
         def students
+        def total
 
         if (params.name && params.email) {
 
@@ -28,11 +29,20 @@ class StudentRestController extends RestfulController<Student> {
                 [max: max, offset: offset]
             )
 
+            total = Student.countByNameIlikeAndEmailIlike(
+                "%${params.name}%",
+                "%${params.email}%"
+            )
+
         } else if (params.name) {
 
             students = Student.findAllByNameIlike(
                 "%${params.name}%",
                 [max: max, offset: offset]
+            )
+
+            total = Student.countByNameIlike(
+                "%${params.name}%"
             )
 
         } else if (params.email) {
@@ -42,15 +52,20 @@ class StudentRestController extends RestfulController<Student> {
                 [max: max, offset: offset]
             )
 
+            total = Student.countByEmailIlike(
+                "%${params.email}%"
+            )
+
         } else {
 
             students = Student.list(
                 max: max,
                 offset: offset
             )
+
+            total = Student.count()
         }
 
-        def total = Student.count()
         def page = (offset / max) + 1
 
         respond([
@@ -66,9 +81,11 @@ class StudentRestController extends RestfulController<Student> {
 
         if (!student) {
             response.status = 404
+
             respond([
                 error: "Student not found"
             ])
+
             return
         }
 
@@ -97,9 +114,11 @@ class StudentRestController extends RestfulController<Student> {
 
         if (!student) {
             response.status = 404
+
             respond([
                 error: "Student not found"
             ])
+
             return
         }
 
@@ -112,38 +131,42 @@ class StudentRestController extends RestfulController<Student> {
     }
 
     @Override
-def save() {
-    def json = request.JSON
+    def save() {
 
-    Student student = new Student(
-        name: json.name,
-        email: json.email,
-        studentNumber: json.studentNumber
-    )
+        def json = request.JSON
 
-    if (!student.validate()) {
-        response.status = 400
+        Student student = new Student(
+            name: json.name,
+            email: json.email,
+            studentNumber: json.studentNumber
+        )
+
+        if (!student.validate()) {
+            response.status = 400
+
+            respond([
+                errors: student.errors.allErrors.collect { error ->
+                    [
+                        field  : error.field,
+                        message: message(error: error)
+                    ]
+                }
+            ])
+
+            return
+        }
+
+        student.save()
+
+        response.status = 201
+
         respond([
-            errors: student.errors.allErrors.collect { error ->
-                [
-                    field  : error.field,
-                    message: message(error: error)
-                ]
-            }
+            data: [
+                id           : student.id,
+                name         : student.name,
+                email        : student.email,
+                studentNumber: student.studentNumber
+            ]
         ])
-        return
     }
-
-    student.save()
-
-    response.status = 201
-    respond([
-        data: [
-            id           : student.id,
-            name         : student.name,
-            email        : student.email,
-            studentNumber: student.studentNumber
-        ]
-    ])
-}
 }
