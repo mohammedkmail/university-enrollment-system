@@ -1,8 +1,6 @@
 package university
 
-import grails.rest.Resource
 
-@Resource(uri = '/api/courses')
 class Course {
 
     String title

@@ -5,7 +5,7 @@ class UrlMappings {
     static mappings = {
 
         // =========================
-        // Students API
+        // Students REST API
         // =========================
 
         get "/api/students"(
@@ -33,19 +33,26 @@ class UrlMappings {
             action: "delete"
         )
 
-        get "/api/students/$id/gpa"(
-            controller: "studentRest",
-            action: "gpa"
-        )
+        // Custom Student endpoints
 
         get "/api/students/$id/courses"(
             controller: "studentRest",
             action: "courses"
         )
 
+        get "/api/students/$id/gpa"(
+            controller: "studentRest",
+            action: "gpa"
+        )
+
+        get "/api/students/list"(
+            controller: "studentRest",
+            action: "list"
+        )
+
 
         // =========================
-        // Courses API
+        // Courses REST API
         // =========================
 
         get "/api/courses"(
@@ -53,14 +60,29 @@ class UrlMappings {
             action: "index"
         )
 
+        post "/api/courses"(
+            controller: "courseRest",
+            action: "save"
+        )
+
         get "/api/courses/$id"(
             controller: "courseRest",
             action: "show"
         )
 
+        put "/api/courses/$id"(
+            controller: "courseRest",
+            action: "update"
+        )
+
+        delete "/api/courses/$id"(
+            controller: "courseRest",
+            action: "delete"
+        )
+
 
         // =========================
-        // Enrollments API
+        // Enrollments REST API
         // =========================
 
         get "/api/enrollments"(
@@ -68,9 +90,24 @@ class UrlMappings {
             action: "index"
         )
 
+        post "/api/enrollments"(
+            controller: "enrollmentRest",
+            action: "save"
+        )
+
         get "/api/enrollments/$id"(
             controller: "enrollmentRest",
             action: "show"
+        )
+
+        put "/api/enrollments/$id"(
+            controller: "enrollmentRest",
+            action: "update"
+        )
+
+        delete "/api/enrollments/$id"(
+            controller: "enrollmentRest",
+            action: "delete"
         )
 
 

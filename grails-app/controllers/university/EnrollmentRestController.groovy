@@ -10,11 +10,26 @@ class EnrollmentRestController extends RestfulController<Enrollment> {
         super(Enrollment)
     }
 
+    // GET /api/enrollments
+    // Pagination:
+    // ?max=10&offset=0
     @Override
     def index() {
 
         def max = params.int('max') ?: 10
         def offset = params.int('offset') ?: 0
+
+        if (max < 1) {
+            max = 10
+        }
+
+        if (max > 100) {
+            max = 100
+        }
+
+        if (offset < 0) {
+            offset = 0
+        }
 
         def enrollments = Enrollment.list(
             max: max,
@@ -22,7 +37,8 @@ class EnrollmentRestController extends RestfulController<Enrollment> {
         )
 
         def total = Enrollment.count()
-        def page = (offset / max) + 1
+
+        def page = offset.intdiv(max) + 1
 
         respond([
             total: total,

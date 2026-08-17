@@ -7,7 +7,11 @@ class CourseController {
 
     CourseService courseService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [
+        save: "POST",
+        update: "PUT",
+        delete: "DELETE"
+    ]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -42,15 +46,16 @@ class CourseController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(
-                        code: 'default.created.message',
-                        args: [
-                                message(
-                                        code: 'course.label',
-                                        default: 'Course'
-                                ),
-                                course.id
-                        ]
+                    code: 'default.created.message',
+                    args: [
+                        message(
+                            code: 'course.label',
+                            default: 'Course'
+                        ),
+                        course.id
+                    ]
                 )
+
                 redirect course
             }
 
@@ -82,15 +87,16 @@ class CourseController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(
-                        code: 'default.updated.message',
-                        args: [
-                                message(
-                                        code: 'course.label',
-                                        default: 'Course'
-                                ),
-                                course.id
-                        ]
+                    code: 'default.updated.message',
+                    args: [
+                        message(
+                            code: 'course.label',
+                            default: 'Course'
+                        ),
+                        course.id
+                    ]
                 )
+
                 redirect course
             }
 
@@ -111,14 +117,14 @@ class CourseController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(
-                        code: 'default.deleted.message',
-                        args: [
-                                message(
-                                        code: 'course.label',
-                                        default: 'Course'
-                                ),
-                                id
-                        ]
+                    code: 'default.deleted.message',
+                    args: [
+                        message(
+                            code: 'course.label',
+                            default: 'Course'
+                        ),
+                        id
+                    ]
                 )
 
                 redirect action: "index", method: "GET"
@@ -134,14 +140,14 @@ class CourseController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(
-                        code: 'default.not.found.message',
-                        args: [
-                                message(
-                                        code: 'course.label',
-                                        default: 'Course'
-                                ),
-                                params.id
-                        ]
+                    code: 'default.not.found.message',
+                    args: [
+                        message(
+                            code: 'course.label',
+                            default: 'Course'
+                        ),
+                        params.id
+                    ]
                 )
 
                 redirect action: "index", method: "GET"
