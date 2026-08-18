@@ -1,5 +1,7 @@
 package university
 
+
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
@@ -128,6 +130,9 @@ class StudentController {
         }
     }
 
+
+
+    @Secured(['ROLE_ADMIN'])
     def delete(Long id) {
         if (id == null) {
             notFound()

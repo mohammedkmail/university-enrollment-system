@@ -22,9 +22,10 @@
 </header>
 
 <nav class="navbar navbar-expand-md">
-    <div class="container">
+    <div class="container d-flex justify-content-between align-items-center">
 
-        <div class="navbar-nav">
+        <!-- Navigation Links -->
+        <div class="navbar-nav gap-2">
 
             <g:link uri="/" class="nav-link">
                 Home
@@ -46,6 +47,34 @@
                 Dashboard
             </g:link>
 
+        </div>
+
+
+        <!-- User Section -->
+        <div class="d-flex align-items-center gap-3">
+
+            <sec:ifLoggedIn>
+                <span class="navbar-text">
+                    Welcome, <sec:loggedInUserInfo field="username"/>
+                </span>
+
+                <a href="${createLink(uri: '/logoff')}"
+                   class="btn btn-danger">
+                    Logout
+                </a>
+            </sec:ifLoggedIn>
+
+            <sec:ifNotLoggedIn>
+                <a href="${createLink(uri: '/login/auth')}"
+                   class="btn btn-primary">
+                    Login
+                </a>
+            </sec:ifNotLoggedIn>
+
+
+            <sec:ifAnyGranted roles="ROLE_ADMIN">
+               <span>ADMIN ROLE ACTIVE</span>
+            </sec:ifAnyGranted>
         </div>
 
     </div>

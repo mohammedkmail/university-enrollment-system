@@ -1,5 +1,9 @@
 package university
 
+
+import grails.plugin.springsecurity.annotation.Secured
+
+@Secured(['ROLE_USER', 'ROLE_ADMIN'])
 class EnrollmentController {
 
     EnrollmentService enrollmentService
