@@ -24,13 +24,13 @@ class BootStrap {
             User admin = User.findByUsername('admin@ubs.com') ?:
                     new User(
                             username: 'admin@ubs.com',
-                            password: passwordEncoder.encode('admin123')
+                            password: passwordEncoder.encode('admin111')
                     ).save(failOnError: true)
 
             User intern = User.findByUsername('intern@ubs.com') ?:
                     new User(
                             username: 'intern@ubs.com',
-                            password: passwordEncoder.encode('intern123')
+                            password: passwordEncoder.encode('intern111')
                     ).save(failOnError: true)
 
 

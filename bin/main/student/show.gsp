@@ -73,12 +73,16 @@
                             <g:message code="default.button.edit.label" default="Edit" />
                         </g:link>
 
-                        <button class="btn btn-outline-primary"
-                                type="submit"
-                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                        <sec:ifAnyGranted roles="ROLE_ADMIN">
+
+                            <button class="btn btn-outline-primary"
+                             type="submit"
+                            onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="bi-trash"></i>
                             ${message(code: 'default.button.delete.label', default: 'Delete')}
-                        </button>
+                            </button>
+
+                        </sec:ifAnyGranted>
                     </fieldset>
                 </g:form>
 

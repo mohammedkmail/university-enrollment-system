@@ -1,7 +1,8 @@
 package university
-
+import grails.plugin.springsecurity.annotation.Secured
 import grails.rest.RestfulController
 
+@Secured(['ROLE_USER', 'ROLE_ADMIN'])
 class StudentRestController extends RestfulController<Student> {
 
     static responseFormats = ['json', 'html']
@@ -240,4 +241,13 @@ class StudentRestController extends RestfulController<Student> {
                 data: students
         ])
     }
+
+
+        @Secured(['ROLE_ADMIN'])
+        @Override
+        def delete() {
+                super.delete()
+        }
+
+
 }
