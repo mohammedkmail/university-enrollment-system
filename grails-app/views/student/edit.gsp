@@ -61,7 +61,7 @@
                     </ul>
                 </g:hasErrors>
 
-                <g:form resource="${this.student}" controller="${controllerName}" method="PUT">
+                <g:form resource="${this.student}" controller="${controllerName}" method="PUT"  enctype="multipart/form-data">
 
                     <g:hiddenField name="version" value="${this.student?.version}" />
 
@@ -110,6 +110,11 @@
                                     <g:fieldError bean="${student}" field="studentNumber"/>
                                 </div>
                             </g:hasErrors>
+                        </div>
+
+                        <div class="fieldcontain">
+                            <label for="profilePhoto">Profile Photo</label>
+                            <input type="file" name="profilePhoto" id="profilePhoto">
                         </div>
 
                     </fieldset>

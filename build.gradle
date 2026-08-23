@@ -61,6 +61,8 @@ dependencies {
     implementation "org.apache.grails:grails-data-hibernate5"
     implementation "org.apache.grails:grails-gsp"
     implementation "org.apache.grails:grails-spring-security:7.0.2"
+    implementation "org.apache.grails:grails-quartz:4.0.1"
+
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
     runtimeOnly "org.fusesource.jansi:jansi"
@@ -74,7 +76,6 @@ dependencies {
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.apache.grails:grails-testing-support-web"
     runtimeOnly 'com.mysql:mysql-connector-j'
-    
 }
 
 compileJava.options.release = 17
@@ -82,7 +83,6 @@ compileJava.options.release = 17
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
-
 
 assets {
     excludes = [
@@ -93,9 +93,7 @@ assets {
     includes = [
             'webjars/jquery/*/dist/jquery.js',
             'webjars/bootstrap/*/dist/js/bootstrap.bundle.js',
-            'webjars/bootstrap/*/dist/css/bootstrap.css',
             'webjars/bootstrap-icons/*/font/bootstrap-icons.css',
             'webjars/bootstrap-icons/*/font/fonts/*',
     ]
 }
-

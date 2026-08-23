@@ -5,14 +5,14 @@ grails:
         defaultPackage: university
     gorm:
         reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
             events: false
+
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
+
 spring:
     jmx:
         unique-names: true
@@ -30,6 +30,7 @@ spring:
                 - '**/*.gson'
                 - 'logback-spring.xml'
                 - '*.properties'
+
 environments:
     development:
         management:
@@ -62,29 +63,33 @@ grails:
             csv: text/csv
             form: application/x-www-form-urlencoded
             html:
-              - text/html
-              - application/xhtml+xml
+                - text/html
+                - application/xhtml+xml
             js: text/javascript
             json:
-              - application/json
-              - text/json
+                - application/json
+                - text/json
             multipartForm: multipart/form-data
             pdf: application/pdf
             rss: application/rss+xml
             text: text/plain
             hal:
-              - application/hal+json
-              - application/hal+xml
+                - application/hal+json
+                - application/hal+xml
             xml:
-              - text/xml
-              - application/xml
+                - text/xml
+                - application/xml
+
     urlmapping:
         cache:
             maxsize: 1000
+
     controllers:
         defaultScope: singleton
+
     converters:
         encoding: UTF-8
+
     views:
         default:
             codec: html
@@ -103,6 +108,7 @@ hibernate:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+
 dataSource:
     pooled: true
     jmxExport: true
@@ -118,10 +124,12 @@ environments:
             username: root
             password: 123456
             url: jdbc:mysql://localhost:3306/university_db
+
     test:
         dataSource:
             dbCreate: update
             url: jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+
     production:
         dataSource:
             dbCreate: none
@@ -143,4 +151,8 @@ environments:
                 testWhileIdle: true
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+                defaultTransactionIsolation: 2
+
+---
+inactiveStudentCleanup:
+    dryRun: true

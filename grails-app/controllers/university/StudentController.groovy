@@ -1,8 +1,8 @@
 package university
 
-
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+
 import static org.springframework.http.HttpStatus.*
 
 class StudentController {
@@ -40,14 +40,24 @@ class StudentController {
 
     def show(Long id) {
 
-        Student student = studentService.get(id)
+    if (id == null) {
+        notFound()
+        return
+    }
 
-        double gpa = enrollmentService.calculateGpa(id)
+    Student student = studentService.get(id)
 
-        [
-                student: student,
-                gpa: gpa
-        ]
+    if (student == null) {
+        notFound()
+        return
+    }
+
+    double gpa = enrollmentService.calculateGpa(id)
+
+    [
+        student: student,
+        gpa: gpa
+    ]
     }
 
     def create() {
@@ -100,6 +110,26 @@ class StudentController {
             return
         }
 
+        def upload = request.getFile('profilePhoto')
+
+        if (upload && !upload.empty) {
+
+            if (!upload.contentType.startsWith('image/')) {
+                flash.message = "Only image files are allowed."
+                respond student, view: 'edit'
+                return
+            }
+
+            if (upload.size >= 2 * 1024 * 1024) {
+                flash.message = "Image size must be less than 2MB."
+                respond student, view: 'edit'
+                return
+            }
+
+            student.profilePhoto = upload.bytes
+            student.contentType = upload.contentType
+        }
+
         try {
             studentService.save(student)
         } catch (ValidationException e) {
@@ -130,7 +160,18 @@ class StudentController {
         }
     }
 
+    def renderPhoto(Long id) {
+        Student student = studentService.get(id)
 
+        if (!student || !student.profilePhoto) {
+            render status: NOT_FOUND
+            return
+        }
+
+        response.contentType = student.contentType
+        response.outputStream << student.profilePhoto
+        response.outputStream.flush()
+    }
 
     @Secured(['ROLE_ADMIN'])
     def delete(Long id) {
@@ -189,4 +230,10 @@ class StudentController {
             }
         }
     }
+
+
+    def testCleanupJob() {
+    new InactiveStudentCleanupJob().execute()
+    render "Cleanup job executed. Check the logs."
+}
 }
